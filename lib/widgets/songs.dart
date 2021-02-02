@@ -10,7 +10,7 @@ class Songs extends StatefulWidget {
 class _SongsState extends State<Songs> {
   final FlutterAudioQuery audioQuery = FlutterAudioQuery();
   List<SongInfo> songs = [];
-
+  int currentIndex = 0;
   @override
   void initState() {
     getTracks();
