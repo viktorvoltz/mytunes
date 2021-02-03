@@ -26,7 +26,16 @@ class _MusicPlayerState extends State<MusicPlayer> {
       body: Container(
         margin: EdgeInsets.fromLTRB(5, 40, 5, 0),
         child: Column(children: <Widget>[
-          
+          CircleAvatar(
+                backgroundImage: widget.songInfo.albumArtwork == null
+                    ? AssetImage('assets/image/revolt.jpg')
+                    : FileImage(File(widget.songInfo.albumArtwork)),
+                    radius: 95,
+              ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text(widget.songInfo.title),
+          )
         ],),
       )
     );
