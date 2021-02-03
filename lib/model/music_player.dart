@@ -13,31 +13,51 @@ class _MusicPlayerState extends State<MusicPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(onPressed: (){
-          Navigator.of(context).pop();
-        }, icon: Icon(Icons.music_note, color: Colors.black)),
-        title: Text(
-          'Now Playing',
-          style: TextStyle(color: Colors.black),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.music_note, color: Colors.black)),
+          title: Text(
+            'Now Playing',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-      ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(5, 40, 5, 0),
-        child: Column(children: <Widget>[
-          CircleAvatar(
-                backgroundImage: widget.songInfo.albumArtwork == null
-                    ? AssetImage('assets/image/revolt.jpg')
-                    : FileImage(File(widget.songInfo.albumArtwork)),
-                    radius: 95,
+        body: Container(
+          margin: EdgeInsets.fromLTRB(5, 40, 5, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                    widget.songInfo.albumArtwork == null
+                        ? AssetImage('assets/image/revolt.jpg')
+                        : FileImage(
+                            File(widget.songInfo.albumArtwork),
+                          ),
+                  ),
+                  fit: BoxFit.fill,
+                  ),
+                ),
               ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text(widget.songInfo.title),
-          )
-        ],),
-      )
-    );
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(
+                  widget.songInfo.title,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
