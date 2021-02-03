@@ -93,21 +93,16 @@ class _MusicPlayerState extends State<MusicPlayer> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
+              FittedBox(
+                child: Image.asset(
                       widget.songInfo.albumArtwork == null
-                          ? AssetImage('assets/image/revolt.jpg')
+                          ? Image.asset('assets/image/revolt.jpg')
                           : FileImage(
                               File(widget.songInfo.albumArtwork),
                             ),
                     ),
                     fit: BoxFit.fill,
-                  ),
-                ),
+                
               ),
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 5),
