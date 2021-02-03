@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
-import '../model/music_player.dart';
+import 'music_player.dart';
 
 class Songs extends StatefulWidget {
   @override
