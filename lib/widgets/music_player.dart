@@ -1,17 +1,18 @@
 import 'dart:io';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MusicPlayer extends StatefulWidget {
   SongInfo songInfo;
-  MusicPlayer({this.songInfo});
+  Function changeSong;
+  final GlobalKey<MusicPlayerState> key;
+  MusicPlayer({this.songInfo, this.changeSong, this.key}):super(key: key);
   @override
-  _MusicPlayerState createState() => _MusicPlayerState();
+  MusicPlayerState createState() => MusicPlayerState();
 }
 
-class _MusicPlayerState extends State<MusicPlayer> {
+class MusicPlayerState extends State<MusicPlayer> {
   double minimumValue = 0.0;
   double maximumValue = 0.0;
   double currentValue = 0.0;
@@ -93,17 +94,15 @@ class _MusicPlayerState extends State<MusicPlayer> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              FittedBox(
-                child: Image.asset(
+              CircleAvatar(
+                backgroundImage:
                       widget.songInfo.albumArtwork == null
-                          ? Image.asset('assets/image/revolt.jpg')
+                          ? AssetImage('assets/image/revolt.jpg')
                           : FileImage(
                               File(widget.songInfo.albumArtwork),
                             ),
-                    ),
-                    fit: BoxFit.fill,
-                
-              ),
+                    radius: 100,
+                  ),
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 5),
                 child: Text(
@@ -168,7 +167,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             color: Colors.black, size: 55),
                         behavior: HitTestBehavior.translucent,
                         onTap: (){
-
+                          widget.changeSong(false);
                         },
                       ),
                       GestureDetector(
@@ -184,7 +183,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             color: Colors.black, size: 55),
                         behavior: HitTestBehavior.translucent,
                         onTap: (){
-                          
+                          widget.changeSong(true);
                         },
                       )
                     ],

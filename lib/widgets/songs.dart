@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'music_player.dart';
+import 'package:just_audio/just_audio.dart';
 
 class Songs extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _SongsState extends State<Songs> {
   final FlutterAudioQuery audioQuery = FlutterAudioQuery();
   List<SongInfo> songs = [];
   int currentIndex = 0;
+  final GlobalKey<MusicPlayerState> key = GlobalKey<MusicPlayerState>();
   @override
   void initState() {
     getTracks();
@@ -23,6 +25,19 @@ class _SongsState extends State<Songs> {
     setState(() {
       songs = songs;
     });
+  }
+
+  void changeSongs(bool isNext){
+    if(isNext){
+      if(currentIndex != songs.length - 1){
+        currentIndex++;
+      }
+    }else{
+      if(currentIndex != 0){
+        currentIndex--;
+      }
+    }
+    key.currentState.setSong(songs[currentIndex]);
   }
 
   @override
@@ -51,7 +66,9 @@ class _SongsState extends State<Songs> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => MusicPlayer(
+                      changeSong: changeSongs,
                       songInfo: songs[currentIndex],
+                      key: key,
                     ),
                   ),
                 );
