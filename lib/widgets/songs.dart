@@ -13,6 +13,12 @@ class _SongsState extends State<Songs> {
   final FlutterAudioQuery audioQuery = FlutterAudioQuery();
   List<SongInfo> songs = [];
   int currentIndex = 0;
+  double currentTime = 0.0;
+  double endTime = 0.0;
+  double maximumValue;
+
+  final AudioPlayer player = AudioPlayer();
+
   final GlobalKey<MusicPlayerState> key = GlobalKey<MusicPlayerState>();
   @override
   void initState() {
@@ -27,7 +33,14 @@ class _SongsState extends State<Songs> {
     });
   }
 
+  void nextSong(){
+    if(currentIndex != songs.length - 1){
+      currentIndex++;
+    }
+  }
+
   void changeSongs(bool isNext){
+    
     if(isNext){
       if(currentIndex != songs.length - 1){
         currentIndex++;
@@ -68,6 +81,7 @@ class _SongsState extends State<Songs> {
                     builder: (context) => MusicPlayer(
                       changeSong: changeSongs,
                       songInfo: songs[currentIndex],
+                      nextSong: nextSong,
                       key: key,
                     ),
                   ),

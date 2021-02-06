@@ -6,8 +6,9 @@ import 'package:just_audio/just_audio.dart';
 class MusicPlayer extends StatefulWidget {
   SongInfo songInfo;
   Function changeSong;
+  Function nextSong;
   final GlobalKey<MusicPlayerState> key;
-  MusicPlayer({this.songInfo, this.changeSong, this.key}):super(key: key);
+  MusicPlayer({this.songInfo, this.changeSong, this.nextSong, this.key}):super(key: key);
   @override
   MusicPlayerState createState() => MusicPlayerState();
 }
@@ -55,6 +56,9 @@ class MusicPlayerState extends State<MusicPlayer> {
     setState(() {
       currentTime = getDuration(currentValue);
       endTime = getDuration(maximumValue);
+      if(currentTime == endTime){
+        widget.nextSong();
+      }
     });
     isPlaying = false;
     changeStatus();
