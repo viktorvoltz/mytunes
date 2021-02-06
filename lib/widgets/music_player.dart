@@ -31,14 +31,25 @@ class MusicPlayerState extends State<MusicPlayer> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     player?.dispose();
   }
 
   void setSong(SongInfo songInfo) async {
     widget.songInfo = songInfo;
-    await player.setUrl(widget.songInfo.uri);
+    try {
+      await player.setUrl(widget.songInfo.uri);
+      } catch(error){
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.black,
+          content: Text('Error: track unavailable'),
+          duration: Duration(seconds: 3),
+        )
+      );
+      print('$error hhhhhhhhh');
+  }
     currentValue = minimumValue;
     maximumValue = player.duration.inMilliseconds.toDouble();
     setState(() {
@@ -54,6 +65,8 @@ class MusicPlayerState extends State<MusicPlayer> {
       });
     });
   }
+
+
 
   void changeStatus(){
     setState(() {
