@@ -37,6 +37,7 @@ class _SongsState extends State<Songs> {
     if(currentIndex != songs.length - 1){
       currentIndex++;
     }
+    key.currentState.setSong(songs[currentIndex]);
   }
 
   void changeSongs(bool isNext){

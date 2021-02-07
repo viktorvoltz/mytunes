@@ -38,28 +38,17 @@ class MusicPlayerState extends State<MusicPlayer> {
 
   void setSong(SongInfo songInfo) async {
     widget.songInfo = songInfo;
-    try {
-      await player.setUrl(widget.songInfo.uri);
-      } catch(error){
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.black,
-          content: Text('Error: track unavailable'),
-          duration: Duration(seconds: 3),
-        )
-      );
-      print('$error hhhhhhhhh');
-  }
+    await player.setUrl(widget.songInfo.uri);
     currentValue = minimumValue;
     maximumValue = player.duration.inMilliseconds.toDouble();
     setState(() {
       currentTime = getDuration(currentValue);
       endTime = getDuration(maximumValue);
-      if(currentTime == endTime){
-        widget.nextSong();
-      }
     });
+    if (currentTime == endTime){
+      player.seekToNext();
+      widget.nextSong();  
+    }
     isPlaying = false;
     changeStatus();
     player.positionStream.listen((event) {
@@ -150,6 +139,7 @@ class MusicPlayerState extends State<MusicPlayer> {
                 activeColor: Colors.black,
                 min: minimumValue,
                 max: maximumValue,
+                
               ),
               Container(
                 transform: Matrix4.translationValues(0, -7, 0),
