@@ -55,6 +55,9 @@ class MusicPlayerState extends State<MusicPlayer> {
       currentValue = event.inMilliseconds.toDouble();
       setState(() {
         currentTime = getDuration(currentValue);
+        if (currentTime == endTime){
+          player.seekToNext();
+        }
       });
     });
   }
@@ -130,15 +133,20 @@ class MusicPlayerState extends State<MusicPlayer> {
                 ),
               ),
               Slider(
-                value: currentValue,
+                value: maximumValue > currentValue ? currentValue : maximumValue,
                 onChanged: (value) {
-                  currentValue = value;
-                  player.seek(Duration(milliseconds: currentValue.round()));
+                  setState((){
+                    currentValue = value;
+                    player.seek(Duration(milliseconds: currentValue.round()));
+                    if (currentValue == player.duration.inMilliseconds.toDouble()){
+                      player.seekToNext();
+                    }
+                  });
                 },
                 inactiveColor: Colors.black12,
                 activeColor: Colors.black,
-                min: minimumValue,
-                max: maximumValue,
+                min: 0.0,
+                max: maximumValue > 0 ? maximumValue : 0.0,
                 
               ),
               Container(
