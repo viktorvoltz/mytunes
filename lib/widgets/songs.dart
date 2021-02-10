@@ -33,12 +33,7 @@ class _SongsState extends State<Songs> {
     });
   }
 
-  void nextSong(){
-    if(currentIndex != songs.length - 1){
-      currentIndex++;
-    }
-    key.currentState.setSong(songs[currentIndex]);
-  }
+  
 
   void changeSongs(bool isNext){
     
@@ -82,7 +77,7 @@ class _SongsState extends State<Songs> {
                     builder: (context) => MusicPlayer(
                       changeSong: changeSongs,
                       songInfo: songs[currentIndex],
-                      nextSong: nextSong,
+                      
                       key: key,
                     ),
                   ),

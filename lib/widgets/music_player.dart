@@ -6,16 +6,16 @@ import 'package:just_audio/just_audio.dart';
 class MusicPlayer extends StatefulWidget {
   SongInfo songInfo;
   Function changeSong;
-  Function nextSong;
+  
   final GlobalKey<MusicPlayerState> key;
-  MusicPlayer({this.songInfo, this.changeSong, this.nextSong, this.key}):super(key: key);
+  MusicPlayer({this.songInfo, this.changeSong, this.key}):super(key: key);
   @override
   MusicPlayerState createState() => MusicPlayerState();
 }
 
 class MusicPlayerState extends State<MusicPlayer> {
-  double minimumValue = 0.0;
-  double maximumValue = 0.0;
+  double minimumValue = 1.0;
+  double maximumValue = 10.0;
   double currentValue = 0.0;
   String currentTime = '';
   String endTime = '';
@@ -45,10 +45,6 @@ class MusicPlayerState extends State<MusicPlayer> {
       currentTime = getDuration(currentValue);
       endTime = getDuration(maximumValue);
     });
-    if (currentTime == endTime){
-      player.seekToNext();
-      widget.nextSong();  
-    }
     isPlaying = false;
     changeStatus();
     player.positionStream.listen((event) {
@@ -133,20 +129,22 @@ class MusicPlayerState extends State<MusicPlayer> {
                 ),
               ),
               Slider(
-                value: maximumValue > currentValue ? currentValue : maximumValue,
-                onChanged: (value) {
+                divisions: 10,
+                value: currentValue.toDouble(),
+                onChanged: (double value) {
                   setState((){
-                    currentValue = value;
-                    player.seek(Duration(milliseconds: currentValue.round()));
-                    if (currentValue == player.duration.inMilliseconds.toDouble()){
-                      player.seekToNext();
+                    print('value == $value');
+                    if (value == maximumValue){
+                      widget.changeSong(true);
                     }
+                    currentValue = value.roundToDouble();
+                    player.seek(Duration(milliseconds: currentValue.round()));
                   });
                 },
                 inactiveColor: Colors.black12,
                 activeColor: Colors.black,
-                min: 0.0,
-                max: maximumValue > 0 ? maximumValue : 0.0,
+                min: minimumValue,
+                max: maximumValue,
                 
               ),
               Container(
