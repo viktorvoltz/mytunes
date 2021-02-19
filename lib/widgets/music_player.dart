@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:just_audio/just_audio.dart';
@@ -14,9 +15,9 @@ class MusicPlayer extends StatefulWidget {
 }
 
 class MusicPlayerState extends State<MusicPlayer> {
-  double minimumValue = 1.0;
+  double minimumValue = 0.0;
   double maximumValue = 10.0;
-  double currentValue = 0.0;
+  double currentValue  = 0.0;
   String currentTime = '';
   String endTime = '';
 
@@ -51,8 +52,10 @@ class MusicPlayerState extends State<MusicPlayer> {
       currentValue = event.inMilliseconds.toDouble();
       setState(() {
         currentTime = getDuration(currentValue);
+        
         if (currentTime == endTime){
           player.seekToNext();
+          widget.changeSong(true);
         }
       });
     });
@@ -129,22 +132,20 @@ class MusicPlayerState extends State<MusicPlayer> {
                 ),
               ),
               Slider(
-                divisions: 10,
-                value: currentValue.toDouble(),
-                onChanged: (double value) {
-                  setState((){
-                    print('value == $value');
-                    if (value == maximumValue){
-                      widget.changeSong(true);
-                    }
-                    currentValue = value.roundToDouble();
+                value: currentValue.toDouble() > maximumValue ? maximumValue : currentValue.toDouble(),
+                onChanged: (double newValue) {
+                  setState(() {
+                    print('current valueeee iss $currentValue');
+                    print(player.position.inSeconds.toDouble());
+                    print('new valueeee iss $newValue');
+                    currentValue = newValue;
                     player.seek(Duration(milliseconds: currentValue.round()));
                   });
                 },
                 inactiveColor: Colors.black12,
                 activeColor: Colors.black,
-                min: minimumValue,
-                max: maximumValue,
+                min: 0.0,
+                max: maximumValue
                 
               ),
               Container(
