@@ -53,10 +53,11 @@ class _SongsState extends State<Songs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         backgroundColor: Colors.white,
         leading: Icon(Icons.music_note, color: Colors.black),
         title: Text(
-          'Music App',
+          'Playlist',
           style: TextStyle(color: Colors.black),
         ),
       ),

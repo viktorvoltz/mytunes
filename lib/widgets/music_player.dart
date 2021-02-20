@@ -3,13 +3,14 @@ import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:just_audio/just_audio.dart';
+import 'music_image.dart';
 
 class MusicPlayer extends StatefulWidget {
   SongInfo songInfo;
   Function changeSong;
-  
+
   final GlobalKey<MusicPlayerState> key;
-  MusicPlayer({this.songInfo, this.changeSong, this.key}):super(key: key);
+  MusicPlayer({this.songInfo, this.changeSong, this.key}) : super(key: key);
   @override
   MusicPlayerState createState() => MusicPlayerState();
 }
@@ -17,7 +18,7 @@ class MusicPlayer extends StatefulWidget {
 class MusicPlayerState extends State<MusicPlayer> {
   double minimumValue = 0.0;
   double maximumValue = 10.0;
-  double currentValue  = 0.0;
+  double currentValue = 0.0;
   String currentTime = '';
   String endTime = '';
 
@@ -52,8 +53,8 @@ class MusicPlayerState extends State<MusicPlayer> {
       currentValue = event.inMilliseconds.toDouble();
       setState(() {
         currentTime = getDuration(currentValue);
-        
-        if (currentTime == endTime){
+
+        if (currentTime == endTime) {
           //player.seekToNext();
           widget.changeSong(true);
         }
@@ -61,16 +62,13 @@ class MusicPlayerState extends State<MusicPlayer> {
     });
   }
 
-
-
-  void changeStatus(){
+  void changeStatus() {
     setState(() {
       isPlaying = !isPlaying;
     });
-    if (isPlaying){
+    if (isPlaying) {
       player.play();
-    }
-    else{
+    } else {
       player.pause();
     }
   }
@@ -85,8 +83,10 @@ class MusicPlayerState extends State<MusicPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          elevation: 0,
+          backgroundColor: Colors.grey,
           leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -98,28 +98,24 @@ class MusicPlayerState extends State<MusicPlayer> {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.fromLTRB(5, 40, 5, 0),
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CircleAvatar(
-                backgroundImage:
-                      widget.songInfo.albumArtwork == null
-                          ? AssetImage('assets/image/revolt.jpg')
-                          : FileImage(
-                              File(widget.songInfo.albumArtwork),
-                            ),
-                    radius: 100,
-                  ),
+              musicImage(widget.songInfo),
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 5),
-                child: Text(
-                  widget.songInfo.title,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600),
-                ),
+                child: widget.songInfo.title.endsWith('.com')
+                    ? Text(widget.songInfo.title.replaceAll('.com', ''),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600))
+                    : Text(widget.songInfo.title,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600)),
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 7),
@@ -132,39 +128,39 @@ class MusicPlayerState extends State<MusicPlayer> {
                 ),
               ),
               Slider(
-                value: currentValue.toDouble() > maximumValue ? maximumValue : currentValue.toDouble(),
-                onChanged: (double newValue) {
-                  setState(() {
-                    print('current valueeee iss $currentValue');
-                    print(player.position.inSeconds.toDouble());
-                    print('new valueeee iss $newValue');
-                    currentValue = newValue;
-                    player.seek(Duration(milliseconds: currentValue.round()));
-                  });
-                },
-                inactiveColor: Colors.black12,
-                activeColor: Colors.black,
-                min: 0.0,
-                max: maximumValue
-                
-              ),
+                  value: currentValue.toDouble() > maximumValue
+                      ? maximumValue
+                      : currentValue.toDouble(),
+                  onChanged: (double newValue) {
+                    setState(() {
+                      print('current valueeee iss $currentValue');
+                      print(player.position.inSeconds.toDouble());
+                      print('new valueeee iss $newValue');
+                      currentValue = newValue;
+                      player.seek(Duration(milliseconds: currentValue.round()));
+                    });
+                  },
+                  inactiveColor: Colors.black12,
+                  activeColor: Colors.blueGrey,
+                  min: 0.0,
+                  max: maximumValue),
               Container(
                 transform: Matrix4.translationValues(0, -7, 0),
-                margin: EdgeInsets.only(top: 10, left: 5, right: 5),
+                margin: EdgeInsets.only(top: 3, left: 5, right: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       currentTime,
                       style: TextStyle(
-                          color: Colors.grey,
+                          color: Colors.black38,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
                       endTime,
                       style: TextStyle(
-                          color: Colors.grey,
+                          color: Colors.black38,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500),
                     )
@@ -172,31 +168,31 @@ class MusicPlayerState extends State<MusicPlayer> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: EdgeInsets.only(top: 3),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GestureDetector(
                         child: Icon(Icons.skip_previous,
-                            color: Colors.black, size: 55),
+                            color: Colors.black, size: 45),
                         behavior: HitTestBehavior.translucent,
-                        onTap: (){
+                        onTap: () {
                           widget.changeSong(false);
                         },
                       ),
                       GestureDetector(
                         child: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
-                            color: Colors.black, size: 55),
+                            color: Colors.black, size: 45),
                         behavior: HitTestBehavior.translucent,
-                        onTap: (){
+                        onTap: () {
                           changeStatus();
                         },
                       ),
                       GestureDetector(
                         child: Icon(Icons.skip_next,
-                            color: Colors.black, size: 55),
+                            color: Colors.black, size: 45),
                         behavior: HitTestBehavior.translucent,
-                        onTap: (){
+                        onTap: () {
                           widget.changeSong(true);
                         },
                       )
