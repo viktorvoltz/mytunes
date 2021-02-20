@@ -68,7 +68,7 @@ class _SongsState extends State<Songs> {
                     ? AssetImage('assets/image/revolt.jpg')
                     : FileImage(File(songs[index].albumArtwork)),
               ),
-              title: Text(songs[index].title),
+              title: songs[index].title.endsWith('.com') ? Text(songs[index].title.replaceAll('.com', '')) : Text(songs[index].title),
               subtitle: Text(songs[index].artist),
               onTap: () {
                 currentIndex = index;

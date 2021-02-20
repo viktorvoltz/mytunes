@@ -54,7 +54,7 @@ class MusicPlayerState extends State<MusicPlayer> {
         currentTime = getDuration(currentValue);
         
         if (currentTime == endTime){
-          player.seekToNext();
+          //player.seekToNext();
           widget.changeSong(true);
         }
       });
