@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
-import 'package:just_audio/just_audio.dart';
 import 'dart:io';
 
 Widget musicImage(SongInfo songInfo) {
@@ -12,9 +13,15 @@ Widget musicImage(SongInfo songInfo) {
             image: songInfo.albumArtwork == null
                 ? AssetImage('assets/image/revolt.jpg')
                 : FileImage(File(songInfo.albumArtwork)),
-            fit: BoxFit.fill
-            ),
+            fit: BoxFit.fill),
         shape: BoxShape.rectangle,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black54,
+              blurRadius: 2.0,
+              spreadRadius: 1.0,
+              offset: Offset(2, 3))
+        ],
         borderRadius: BorderRadius.circular(5)),
   );
 }
